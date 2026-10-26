@@ -1,0 +1,31 @@
+name: Debug APK
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build debug APKs (v0.21.3)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pinned tag
+        uses: actions/checkout@v4
+        with:
+          ref: v0.21.3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build debug APKs
+        run: ./gradlew :app:assembleDebug --no-daemon --console=plain
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: mihon-debug-apks
+          path: app/build/outputs/apk/debug/*.apk
