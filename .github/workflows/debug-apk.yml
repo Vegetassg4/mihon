@@ -21,7 +21,13 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Build debug APKs
+      - name: Build debug APKs (fixed keystore)
+        env:
+          MIHON_GITHUB_RELEASE: "true"
+          storeFile: ${{ github.workspace }}/keystores/mihon-debug.keystore
+          storePassword: "android"
+          keyAlias: "mihondebug"
+          keyPassword: "android"
         run: ./gradlew :app:assembleDebug --no-daemon --console=plain
 
       - name: Upload APKs
